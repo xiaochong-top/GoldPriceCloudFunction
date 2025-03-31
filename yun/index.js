@@ -37,6 +37,11 @@ function getPrice(){
 }
 
 // 主函数 - 改为基于Promise的实现
+/**
+ * @param event buffer类型 事件对象
+ * @param context 上下文，包括账户信息
+ * @param callback
+ */
 function analyzeGoldPrice(event, context, callback) {
 
     getPrice().then(([ realtimeData, historyData,newDateStr,newTimeStr,newPriceArr,formatHistoryData ]) => {
@@ -66,7 +71,12 @@ function analyzeGoldPrice(event, context, callback) {
             result.PriceChange_5=(formatHistoryData[historyLength-4].close-formatHistoryData[historyLength-5].close).toFixed(2)
         }
 
-        // console.log(result)
+        // 事件对象转换为object类型
+        let evetObject=JSON.parse(event.toString('utf-8'));
+        // 如果包含请求头对象则为http请求触发，没有则为定时计划任务
+        if(evetObject.requestContext){
+
+        }
 
         callback(null, result);
         })
